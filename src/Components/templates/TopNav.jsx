@@ -1,11 +1,30 @@
-import { useRef, useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-
-
+import axios from '../../utils/Axios'
 const TopNav = () => {
+
+
+
+
   const [query, setQuery] = useState("");
-  useRef
-  console.log(query)
+  const [searches, setSearches] = useState([]);
+  const GetSearches = async () => {
+    try {
+      const { data } = await axios.get(`/search/multi?query=${query}`)
+      setSearches(data.results);
+
+    } catch (error) {
+      console.log("Error: " + error)
+
+    }
+  }
+  useEffect(() => {
+
+    GetSearches();
+
+  }, [query])
+
+
 
 
   return (
@@ -26,11 +45,18 @@ const TopNav = () => {
 
 
       <div className="w-[50%] absolute max-h-[50vh] bg-zinc-200 top-[90%] overflow-auto rounded-md">
-        {/* <Link className="hover:text-zinc-black hover:bg-zinc-300 duration-300 font-semibold text-zinc-800 bg-zinc-100 w-full p-10 flex justify-start items-center  border-b-2 border-zinc-200">
-          <img src="" alt="" />
-          <span>Hello everyone</span>
-        </Link> */}
-   
+        <div className="w-[50%] absolute max-h-[50vh] bg-zinc-200 top-[90%] overflow-auto rounded-md">
+          {searches.map((s, i) => (
+            <Link
+              key={i}
+              className="hover:text-zinc-black hover:bg-zinc-300 duration-300 font-semibold text-zinc-800 bg-zinc-100 w-full p-10 flex justify-start items-center border-b-2 border-zinc-200"
+            >
+              <img src="" alt="" />
+              <span>Hello</span>
+            </Link>
+          ))}
+        </div>
+
       </div>
 
     </div>
